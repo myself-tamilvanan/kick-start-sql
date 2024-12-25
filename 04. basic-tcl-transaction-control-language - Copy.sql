@@ -1,17 +1,17 @@
 --Create Database
-create database universities
+CREATE DATABASE universities
 
 --Get into the DB
-use universities
+USE universities
 
 --Create table
-create table students
+CREATE TABLE students
 (
-name varchar(255),
-department varchar(200),
-age integer,
-date_of_birth date,
-gender char(1)
+name VARCHAR(255),
+department VARCHAR(200),
+age INTEGER,
+date_of_birth DATE,
+gender CHAR(1)
 )
 
 --Create new records
