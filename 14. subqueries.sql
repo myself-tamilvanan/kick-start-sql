@@ -328,14 +328,40 @@ SELECT * FROM employees e1 WHERE SALARY < ( SELECT AVG(salary) FROM employees e2
 
 SELECT * FROM employees e2 WHERE e2.DEPARTMENT_ID = 30
 
+-- This file contains SQL queries that demonstrate the use of subqueries.
+-- Subqueries are queries nested inside another query, often used to perform
+-- complex filtering, aggregation, or to retrieve data that will be used in 
+-- the main query.
 SELECT AVG(salary) FROM employees e2 WHERE e2.DEPARTMENT_ID = 30
 SELECT * FROM employees e1 WHERE SALARY < ( SELECT AVG(salary) FROM employees e2 WHERE e2.DEPARTMENT_ID = 30 ) AND e1.DEPARTMENT_ID = 30
 
 -- EXISTS AND NOT EXISTS
 DELETE FROM Orders WHERE salesman_id IN (5004,5007)
+/*
+This SQL query retrieves the names and email addresses of all users
+from the 'users' table who have registered within the last 30 days.
 
+The query performs the following steps:
+1. Selects the 'name' and 'email' columns from the 'users' table.
+2. Filters the results to include only those users whose 'registration_date'
+  is within the last 30 days from the current date.
+
+Columns:
+- name: The name of the user.
+- email: The email address of the user.
+
+Table:
+- users: Contains user information including name, email, and registration date.
+
+Conditions:
+- registration_date: The date when the user registered, filtered to be within
+  the last 30 days from the current date.
+*/
 SELECT * FROM Salesman s WHERE EXISTS 
 (SELECT 1 FROM orders o WHERE s.salesman_id = o.salesman_id)
 
+-- This query selects all columns from the Salesman table (aliased as 's')
+-- where there are no corresponding rows in a related subquery.
+-- The NOT EXISTS condition is used to filter out rows where the subquery returns any results.
 SELECT * FROM Salesman s WHERE NOT EXISTS 
 (SELECT 1 FROM orders o WHERE s.salesman_id = o.salesman_id)
