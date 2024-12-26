@@ -311,52 +311,25 @@ SELECT MIN(SALARY) FROM employees
 --DELETE ALL THE EMPLOYEES WHOSE DEPARTMENT IS EITHER 'Administration'
 --OR 'Marketing'
 
-SELECT * FROM employees
-SELECT * FROM departments
-
 DELETE FROM employees
 WHERE DEPARTMENT_ID IN (SELECT DEPARTMENT_ID FROM departments 
 WHERE DEPARTMENT_NAME IN ('Administration','Marketing'))
 
 SELECT * FROM employees
 
-SELECT *
-FROM employees
-WHERE
-    SALARY < (
-        SELECT AVG(salary)
-        FROM employees
-    )
+SELECT * FROM employees WHERE SALARY < (SELECT AVG(salary) FROM employees)
 
 ----CORRELATED SUBQUERY
 
 /* LIST ALL EMPLOYEES WHOSE SALARY IS LESS
 THAN THE AVG SALARY IN THAT DEPARTMENT */
 
-SELECT *
-FROM employees e1
-WHERE
-    SALARY < (
-        SELECT AVG(salary)
-        FROM employees e2
-        WHERE
-            e2.DEPARTMENT = e1.DEPARTMENT
-    )
+SELECT * FROM employees e1 WHERE SALARY < ( SELECT AVG(salary) FROM employees e2 WHERE e2.DEPARTMENT = e1.DEPARTMENT)
 
 SELECT * FROM employees e2 WHERE e2.DEPARTMENT_ID = 30
 
 SELECT AVG(salary) FROM employees e2 WHERE e2.DEPARTMENT_ID = 30
-
-SELECT *
-FROM employees e1
-WHERE
-    SALARY < (
-        SELECT AVG(salary)
-        FROM employees e2
-        WHERE
-            e2.DEPARTMENT_ID = 30
-    )
-    and e1.DEPARTMENT_ID = 30
+SELECT * FROM employees e1 WHERE SALARY < ( SELECT AVG(salary) FROM employees e2 WHERE e2.DEPARTMENT_ID = 30 ) AND e1.DEPARTMENT_ID = 30
 
 -- EXISTS AND NOT EXISTS
 DELETE FROM Orders WHERE salesman_id IN (5004,5007)
