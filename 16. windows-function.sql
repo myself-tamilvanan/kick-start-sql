@@ -140,6 +140,12 @@ SELECT ProductID,StandardCost,ModifiedDate
 FROM Production.ProductCostHistory
 ORDER BY ProductID,ModifiedDate
 
+-- This query retrieves the ProductID, StandardCost, and ModifiedDate from the Production.ProductCostHistory table.
+-- It also calculates the initial and final values of StandardCost for each ProductID using window functions.
+-- The FIRST_VALUE function is used to get the initial StandardCost for each ProductID based on the earliest ModifiedDate.
+-- The LAST_VALUE function is used to get the final StandardCost for each ProductID based on the latest ModifiedDate.
+-- The results are partitioned by ProductID and ordered by ModifiedDate.
+-- The final result set is ordered by ProductID and ModifiedDate.
 SELECT ProductID, StandardCost, ModifiedDate,
 FIRST_VALUE(StandardCost) OVER(PARTITION BY ProductID ORDER BY ModifiedDate) AS Initial_value,
 LAST_VALUE(StandardCost) OVER(PARTITION BY ProductID ORDER BY ModifiedDate
@@ -148,12 +154,23 @@ AND UNBOUNDED FOLLOWING) AS Final_value
 FROM Production.ProductCostHistory
 ORDER BY ProductID, ModifiedDate
 
+
+-- This query retrieves the ProductID, StandardCost, and ModifiedDate from the Production.ProductCostHistory table.
+-- It also calculates the previous and next StandardCost values for each product using window functions.
+-- The LAG function is used to get the previous StandardCost value, with a default of 0 if there is no previous value.
+-- The LEAD function is used to get the next StandardCost value.
+-- The results are partitioned by ProductID and ordered by ModifiedDate.
+-- Finally, the results are ordered by ProductID and ModifiedDate.
 SELECT ProductID, StandardCost, ModifiedDate,
-LAG(StandardCost,1,0) OVER(PARTITION BY ProductID ORDER BY ModifiedDate) AS Previous_value,
+LAG(StandardCost, 1, 0) OVER(PARTITION BY ProductID ORDER BY ModifiedDate) AS Previous_value,
 LEAD(StandardCost) OVER(PARTITION BY ProductID ORDER BY ModifiedDate) AS Next_value
 FROM Production.ProductCostHistory
 ORDER BY ProductID, ModifiedDate
 
+-- This Common Table Expression (CTE) named 'Latest_data' retrieves the latest cost data for each product.
+-- It selects the ProductID, StandardCost, and ModifiedDate from the Production.ProductCostHistory table.
+-- The ROW_NUMBER() window function is used to assign a unique row number to each row within a partition of ProductID,
+-- ordered by ModifiedDate in descending order. This ensures that the most recent cost data for each product is given a row number of 1.
 WITH Latest_data as (
 SELECT ProductID,StandardCost,ModifiedDate,
 ROW_NUMBER() OVER(PARTITION BY ProductID ORDER BY ModifiedDate DESC) AS Rno
