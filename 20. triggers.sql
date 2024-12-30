@@ -18,7 +18,7 @@ END
 
 ALTER TRIGGER trg_emp_audit
 ON employees
-AFTER INSERT,DELETE
+AFTER INSERT, DELETE
 AS
 BEGIN
 INSERT INTO employees_audit
